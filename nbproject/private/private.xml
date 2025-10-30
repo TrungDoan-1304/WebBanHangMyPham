@@ -3,11 +3,64 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Model/ProductImage.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/web/guest-order-lookup.jsp</file>
             <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/web/home.jsp</file>
-            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Util/banmypham.sql</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/DAO/CategoryDAO.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/web/header.jsp</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Util/PasswordMigrationUtility.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Util/EmailUtility.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/web/gioithieu.jsp</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Controller/CategoryController.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/web/orders.jsp</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Controller/GuestLookupController.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Controller/BankTransferController.java</file>
             <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Util/DBconnect.java</file>
-            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/web/index.html</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/web/search_results.jsp</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/web/bankTransfer.jsp</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Controller/LoginController.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/web/css/style.css</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Util/banmypham.sql</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/DAO/UserDAO.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/DAO/ProductDAO.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Controller/UpdateProfileController.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/web/cart.jsp</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/web/login.jsp</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/web/user.jsp</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Model/User.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Controller/ForgotPasswordController.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Controller/RegisterController.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Controller/OrderConfirmationController.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Controller/OrdersController.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Controller/SearchController.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/web/footer.jsp</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/web/category.jsp</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Model/CartItem.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Model/Order.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Controller/ContactController.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Model/MigrationExecutor.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Controller/ProductListController.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/web/checkout.jsp</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/DAO/CartDAO.java</file>
             <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Model/Product.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Controller/CartUpdateController.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/DAO/OrderDAO.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Model/Category.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/web/productDetail.jsp</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/web/sanpham.jsp</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Controller/CheckoutPageController.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/web/chinhsach.jsp</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/web/register.jsp</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/web/tintuc.jsp</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/web/index.html</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/web/lienhe.jsp</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/web/orderConfirmation.jsp</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Model/OrderItem.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Controller/LogoutController.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Controller/CartController.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Controller/AddToCartController.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Controller/ProductDetailController.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/WebBanHangMyPham/src/java/Controller/CheckoutController.java</file>
         </group>
     </open-files>
 </project-private>

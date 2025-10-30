@@ -1,24 +1,23 @@
 package Model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class CartItem {
     private int cartItemId;
     private int cartId;      // Khóa ngoại
     private int productId;   // Khóa ngoại
-    private String size;     // Biến thể (nếu cần)
     private int quantity;
-    private double unitPrice; // Giá tại thời điểm thêm vào giỏ
+   private BigDecimal unitPrice; // Giá tại thời điểm thêm vào giỏ
     private LocalDateTime added_at;
-
+    private Product product;
     public CartItem() {
     }
 
-    public CartItem(int cartItemId, int cartId, int productId, String size, int quantity, double unitPrice, LocalDateTime added_at) {
+    public CartItem(int cartItemId, int cartId, int productId, int quantity, BigDecimal unitPrice, LocalDateTime added_at) {
         this.cartItemId = cartItemId;
         this.cartId = cartId;
         this.productId = productId;
-        this.size = size;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
         this.added_at = added_at;
@@ -48,14 +47,14 @@ public class CartItem {
         this.productId = productId;
     }
 
-    public String getSize() {
-        return size;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setSize(String size) {
-        this.size = size;
+    public void setProduct(Product product) {
+        this.product = product;
     }
-
+    
     public int getQuantity() {
         return quantity;
     }
@@ -64,11 +63,11 @@ public class CartItem {
         this.quantity = quantity;
     }
 
-    public double getUnitPrice() {
+    public BigDecimal getUnitPrice() {
         return unitPrice;
     }
 
-    public void setUnitPrice(double unitPrice) {
+    public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
     }
     
@@ -79,8 +78,8 @@ public class CartItem {
     public void setAdded_at(LocalDateTime added_at) {
         this.added_at = added_at;
     }
-
-    public double getTotalAmount() {
-        return unitPrice * quantity;
+public BigDecimal getTotalAmount() {
+        if (unitPrice == null) return BigDecimal.ZERO;
+        return unitPrice.multiply(BigDecimal.valueOf(quantity));
     }
 }

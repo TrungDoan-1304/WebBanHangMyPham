@@ -1,13 +1,14 @@
 package Model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class Order {
     private int orderId;
     private Integer userId; // Có thể NULL
     private String guestInfo;
-    private LocalDateTime orderDate;
-    private double totalAmount;
+    private java.util.Date orderDate;
+    private BigDecimal totalAmount;
     private String status; // pending, processing, shipped, delivered, canceled
     private String shippingAddress;
     private String paymentMethod;
@@ -15,7 +16,7 @@ public class Order {
     public Order() {
     }
 
-    public Order(int orderId, Integer userId, String guestInfo, LocalDateTime orderDate, double totalAmount, String status, String shippingAddress, String paymentMethod) {
+    public Order(int orderId, Integer userId, String guestInfo, java.util.Date orderDate, BigDecimal totalAmount, String status, String shippingAddress, String paymentMethod) {
         this.orderId = orderId;
         this.userId = userId;
         this.guestInfo = guestInfo;
@@ -50,19 +51,19 @@ public class Order {
         this.guestInfo = guestInfo;
     }
 
-    public LocalDateTime getOrderDate() {
+    public java.util.Date getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(LocalDateTime orderDate) {
+    public void setOrderDate(java.util.Date orderDate) {
         this.orderDate = orderDate;
     }
 
-    public double getTotalAmount() {
+    public BigDecimal getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(double totalAmount) {
+    public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
     }
 

@@ -8,37 +8,38 @@ import java.time.LocalDateTime;
 
 public class User {
 
-    private int userId;
+    private Integer userId;
     private String username;
-    private String password; // Lưu ý: Trong thực tế, đây nên là passwordHash
-    private String HoTen;
+    private String passwordhash; // Lưu ý: Trong thực tế, đây nên là passwordHash
+    private String fullName;
     private String email;
-    private String SDT; // Số điện thoại
-    private String DiaChi;
+    private String phonenumber; // Số điện thoại
+    private String address;
     private String role; // "admin" hoặc "customer"
     private LocalDateTime created_at;
 
     public User() {
     }
 
-    public User(int userId, String username, String password, String HoTen,
-                String email, String SDT, String DiaChi, String role, LocalDateTime created_at) {
+    public User(Integer userId, String username, String passwordhash, String fullName, String email, String phonenumber, String address, String role, LocalDateTime created_at) {
         this.userId = userId;
         this.username = username;
-        this.password = password;
-        this.HoTen = HoTen;
+        this.passwordhash = passwordhash;
+        this.fullName = fullName;
         this.email = email;
-        this.SDT = SDT;
-        this.DiaChi = DiaChi;
+        this.phonenumber = phonenumber;
+        this.address = address;
         this.role = role;
         this.created_at = created_at;
     }
 
-    public int getUserId() {
+    
+
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
@@ -50,21 +51,16 @@ public class User {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
-    public String getHoTen() {
-        return HoTen;
-    }
+ 
 
-    public void setHoTen(String HoTen) {
-        this.HoTen = HoTen;
-    }
 
     public String getEmail() {
         return email;
@@ -74,21 +70,30 @@ public class User {
         this.email = email;
     }
 
-    public String getSDT() {
-        return SDT;
+    public String getPasswordhash() {
+        return passwordhash;
     }
 
-    public void setSDT(String SDT) {
-        this.SDT = SDT;
+    public void setPasswordhash(String passwordhash) {
+        this.passwordhash = passwordhash;
     }
 
-    public String getDiaChi() {
-        return DiaChi;
+    public String getPhonenumber() {
+        return phonenumber;
     }
 
-    public void setDiaChi(String DiaChi) {
-        this.DiaChi = DiaChi;
+    public void setPhonenumber(String phonenumber) {
+        this.phonenumber = phonenumber;
     }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
 
     public String getRole() {
         return role;
