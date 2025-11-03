@@ -17,7 +17,7 @@ public class OrderConfirmationController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+         request.setCharacterEncoding("UTF-8");
         String orderIdStr = request.getParameter("orderId");
         
         try {
@@ -39,7 +39,7 @@ public class OrderConfirmationController extends HttpServlet {
             request.getRequestDispatcher("/orderConfirmation.jsp").forward(request, response);
             
         } catch (NumberFormatException e) {
-            response.sendRedirect(request.getContextPath() + "/home");
+            response.sendRedirect(request.getContextPath() + "/home.jsp");
         }
     }
 }

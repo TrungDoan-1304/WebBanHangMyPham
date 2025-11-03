@@ -1,23 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package Controller;
 
 import DAO.UserDAO;
 import Util.EmailUtility;
+import Util.PasswordGeneratorUtility; // Import hàm tạo mật khẩu
+import org.mindrot.jbcrypt.BCrypt; // Import thư viện BCrypt
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author PC
- */
 @WebServlet(name = "ForgotPasswordController", urlPatterns = {"/forgotPassword"})
 public class ForgotPasswordController extends HttpServlet {
 
@@ -28,33 +21,45 @@ public class ForgotPasswordController extends HttpServlet {
             throws ServletException, IOException {
         
         String email = request.getParameter("email");
-        String destination = "/home.jsp"; // Chuyển hướng về trang chủ hoặc JSP chính
+        String destination = "/home.jsp"; 
 
-        // 1. Kiểm tra Email trong CSDL
-        String password = userDAO.getPasswordByEmail(email);
+        // 1. Kiểm tra Email có tồn tại không (Không lấy mật khẩu cũ)
+        // (Sử dụng hàm checkUserExistence, giả định nó kiểm tra cả username và email)
+        boolean emailExists = userDAO.checkUserExistence(null, email);
 
-        if (password != null) {
-            // 2. Tìm thấy Email -> Gửi mật khẩu
-            String subject = "[Web Mỹ Phẩm] Khôi Phục Mật Khẩu";
-            String body = "Xin chào Quý khách,<br><br>"
-                        + "Chúng tôi đã nhận được yêu cầu khôi phục mật khẩu của bạn.<br>"
-                        + "Mật khẩu hiện tại của bạn là: <strong>" + password + "</strong><br><br>"
-                        + "Vui lòng đăng nhập và thay đổi mật khẩu để bảo mật tài khoản.<br><br>"
-                        + "Trân trọng,<br>Đội ngũ Web Mỹ Phẩm.";
-            
-            boolean success = EmailUtility.sendEmail(email, subject, body);
+        if (emailExists) {
+            // 2. Tạo mật khẩu mới
+            String newTempPassword = PasswordGeneratorUtility.generateRandomPassword();
+            // 3. Hash mật khẩu mới để lưu vào CSDL
+            String newHashedPassword = BCrypt.hashpw(newTempPassword, BCrypt.gensalt());
 
-            if (success) {
-                request.setAttribute("fpMessage", "Mật khẩu đã được gửi đến địa chỉ email của bạn.");
+            // 4. Cập nhật mật khẩu mới (đã hash) vào CSDL
+            boolean updateSuccess = userDAO.updatePasswordByEmail(email, newHashedPassword);
+
+            if (updateSuccess) {
+                // 5. Gửi Mật khẩu MỚI (chưa hash) qua email
+                String subject = "[Web Mỹ Phẩm] Mật khẩu Mới Của Bạn";
+                String body = "Xin chào Quý khách,<br><br>"
+                            + "Mật khẩu của bạn đã được đặt lại.<br>"
+                            + "Mật khẩu tạm thời MỚI của bạn là: <h3>" + newTempPassword + "</h3><br>"
+                            + "Vui lòng đăng nhập bằng mật khẩu này và đổi mật khẩu ngay lập tức tại trang Hồ sơ cá nhân.<br><br>"
+                            + "Trân trọng,<br>Đội ngũ Web Mỹ Phẩm.";
+                
+                boolean emailSent = EmailUtility.sendEmail(email, subject, body);
+
+                if (emailSent) {
+                    request.setAttribute("fpMessage", "Một mật khẩu mới đã được gửi đến email của bạn.");
+                } else {
+                    request.setAttribute("fpError", "Gửi email thất bại. Vui lòng thử lại sau.");
+                }
             } else {
-                request.setAttribute("fpError", "Gửi email thất bại. Vui lòng thử lại sau.");
+                request.setAttribute("fpError", "Lỗi CSDL khi cập nhật mật khẩu.");
             }
         } else {
             // 3. Email không tồn tại
             request.setAttribute("fpError", "Email này chưa được đăng ký trong hệ thống.");
         }
         
-        // Chuyển hướng về trang chủ để hiển thị thông báo (Popup sẽ hiển thị thông báo)
         request.getRequestDispatcher(destination).forward(request, response);
     }
 }

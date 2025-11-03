@@ -10,10 +10,10 @@ public class User {
 
     private Integer userId;
     private String username;
-    private String passwordhash; // Lưu ý: Trong thực tế, đây nên là passwordHash
+    private String passwordhash; 
     private String fullName;
     private String email;
-    private String phonenumber; // Số điện thoại
+    private String phonenumber; 
     private String address;
     private String role; // "admin" hoặc "customer"
     private LocalDateTime created_at;

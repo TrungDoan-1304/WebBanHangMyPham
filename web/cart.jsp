@@ -126,7 +126,7 @@
                     <a href="${pageContext.request.contextPath}/home.jsp" class="btn-cart-action btn-continue">
                         ← Tiếp tục mua hàng
                     </a>
-                    <a href="${pageContext.request.contextPath}/checkout.jsp" class="btn-cart-action btn-checkout">
+                    <a href="${pageContext.request.contextPath}/checkout" class="btn-cart-action btn-checkout">
                         Thanh toán →
                     </a>
                 </div>

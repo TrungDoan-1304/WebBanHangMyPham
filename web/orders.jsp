@@ -90,7 +90,7 @@
                                 <p><strong>Tổng tiền:</strong> <span class="price"><fmt:formatNumber value="${order.totalAmount}" type="currency" currencySymbol="VND" /></span></p>
                                 <p><strong>Trạng thái:</strong> <span style="font-weight: bold; color: ${order.status eq 'delivered' ? 'green' : 'orange'}">${order.status}</span></p>
 
-                                <a href="orderDetail?id=${order.orderId}" style="display: block; margin-top: 10px; color: #D9537A;">
+                                <a href="${pageContext.request.contextPath}/orderDetail?orderId=${order.orderId}" style="display: block; margin-top: 10px; color: #D9537A;">
                                     Xem chi tiết đơn hàng
                                 </a>
                             </div>

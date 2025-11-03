@@ -20,21 +20,22 @@ import java.util.List;
 @WebServlet(name = "CheckoutController", urlPatterns = {"/processCheckout"})
 public class CheckoutController extends HttpServlet {
     private final OrderDAO orderDAO = new OrderDAO();
-    private final CartDAO cartDAO = new CartDAO(); // giả sử có DAO quản lý cart
+    private final CartDAO cartDAO = new CartDAO();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
+         request.setCharacterEncoding("UTF-8");
         User user = (User) session.getAttribute("currentUser");
         Integer userId = (user != null) ? user.getUserId() : null;
+        String sessionId = session.getId();
         // Lấy thông tin vận chuyển / payment từ form
         String shippingAddress = request.getParameter("shippingAddress");
         String paymentMethod = request.getParameter("paymentMethod");
         String status = "pending";
-
+        int cartId = cartDAO.getOrCreateCartId(userId, sessionId);
         // Lấy cartId (ví dụ lưu trong session hoặc param)
-        Integer cartId = (Integer) session.getAttribute("cartId");
-        if (cartId == null) {
+        if (cartId == -1) {
             response.sendRedirect(request.getContextPath() + "/cart");
             return;
         }
@@ -80,9 +81,12 @@ public class CheckoutController extends HttpServlet {
 
         int createdOrderId = orderDAO.createOrder(order, cartItems, cartId);
         if (createdOrderId > 0) {
-            // Thành công: chuyển tới trang chi tiết đơn
-            response.sendRedirect(request.getContextPath() + "/orderDetail?id=" + createdOrderId);
-        } else {
+                    if ("BANK_TRANSFER".equals(paymentMethod)) { 
+                response.sendRedirect(request.getContextPath() + "/bankTransfer?orderId=" + createdOrderId);
+                    } else {
+        response.sendRedirect(request.getContextPath() + "/orderConfirmation?orderId=" + createdOrderId);
+        } }
+        else {
             // Lỗi
             request.setAttribute("error", "Không thể tạo đơn hàng. Vui lòng thử lại.");
             request.getRequestDispatcher("/checkout.jsp").forward(request, response);

@@ -112,6 +112,13 @@ public class Product {
     public void setActive(boolean active) {
         isActive = active;
     }
+    public boolean getIsActive() {
+        return isActive;
+    }
+    
+    public boolean getIsFeatured() {
+        return isFeatured;
+    }
 
     public LocalDateTime getCreated_at() {
         return created_at;

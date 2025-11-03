@@ -209,7 +209,7 @@
                         <form action="${pageContext.request.contextPath}/updateProfile" method="POST">
                             <div class="form-group">
                                 <label>Họ và tên:</label>
-                                <input type="text" name="fullName" value="${user.fullName}" required>
+                                <input type="text" name="full_name" value="${user.fullName}" required>
                             </div>
                             <div class="form-group">
                                 <label>Email:</label>
@@ -218,7 +218,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Số điện thoại:</label>
-                                <input type="text" name="phoneNumber" value="${user.phonenumber}" placeholder="Nhập số điện thoại mới">
+                                <input type="text" name="phone_number" value="${user.phonenumber}" placeholder="Nhập số điện thoại mới">
                             </div>
                             <div class="form-group">
                                 <label>Địa chỉ:</label>

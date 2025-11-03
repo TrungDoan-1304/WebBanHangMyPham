@@ -19,34 +19,29 @@ public class UpdateProfileController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-request.setCharacterEncoding("UTF-8");
+    request.setCharacterEncoding("UTF-8");
     HttpSession session = request.getSession();
     User currentUser = (User) session.getAttribute("currentUser");
-    
+    User userCheck = (User) session.getAttribute("currentUser");
+    System.out.println("DEBUG: Current User ID: " + (userCheck != null ? userCheck.getUserId() : "NULL"));
     if (currentUser == null) {
-        // Đảm bảo currentUser có tồn tại trước khi xử lý
         response.sendRedirect(request.getContextPath() + "/home.jsp"); 
         return;
     }
 
-    // Lấy dữ liệu mới từ form
-    String fullName = request.getParameter("fullName");
-    String phonenumber = request.getParameter("phone_number"); // Tên tham số khớp với user.jsp
+    String fullName = request.getParameter("full_name");
+    String phonenumber = request.getParameter("phone_number"); 
     String address = request.getParameter("address");
 
     if (userDAO.updateUserInfo(currentUser.getUserId(), fullName, phonenumber, address)) {
         
-        // Cập nhật đối tượng User trong Session
         currentUser.setFullName(fullName);
         currentUser.setPhonenumber(phonenumber);
         currentUser.setAddress(address);
         session.setAttribute("currentUser", currentUser);
-        
-        // LƯU THÔNG BÁO VÀO SESSION SCOPE
         session.setAttribute("statusMessage", "Cập nhật thông tin thành công!");
         session.setAttribute("statusType", "success");
     } else {
-        // LƯU THÔNG BÁO VÀO SESSION SCOPE
         session.setAttribute("statusMessage", "Cập nhật thất bại. Vui lòng thử lại.");
         session.setAttribute("statusType", "error");
     }

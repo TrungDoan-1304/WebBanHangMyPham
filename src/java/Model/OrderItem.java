@@ -6,17 +6,19 @@ public class OrderItem {
     private int productId;  // Khóa ngoại
     private int quantity;
     private double unitPrice; // Giá bán tại thời điểm đặt hàng
-
+    private String productName;
     public OrderItem() {
     }
 
-    public OrderItem(int orderItemId, int orderId, int productId, int quantity, double unitPrice) {
+    public OrderItem(int orderItemId, int orderId, int productId, int quantity, double unitPrice, String productName) {
         this.orderItemId = orderItemId;
         this.orderId = orderId;
         this.productId = productId;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
+        this.productName = productName;
     }
+    
 
     public int getOrderItemId() {
         return orderItemId;
@@ -61,4 +63,13 @@ public class OrderItem {
     public double getTotalAmount() {
         return unitPrice * quantity;
     }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+    
 }

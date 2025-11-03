@@ -16,7 +16,7 @@ public class CartUpdateController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+         request.setCharacterEncoding("UTF-8");
         // Lấy hành động và ID mặt hàng từ form
         String action = request.getParameter("action");
         String cartItemIdStr = request.getParameter("itemId");

@@ -30,7 +30,7 @@ public class ContactController extends HttpServlet {
         String noiDung = request.getParameter("noiDung");
         
         // Email nhận liên hệ (ví dụ: email quản trị)
-        String adminEmail = "admin@myphamtd.com"; 
+        String adminEmail = "trunglay2k4@gmail.com"; 
 
         String subject = "[LIÊN HỆ KHÁCH HÀNG] - " + chuDe;
         String body = "<h3>Khách hàng liên hệ từ website:</h3>" +

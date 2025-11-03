@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th10 29, 2025 lúc 08:48 AM
+-- Thời gian đã tạo: Th10 03, 2025 lúc 06:20 PM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.2.12
 
@@ -62,6 +62,13 @@ CREATE TABLE `carts` (
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ;
 
+--
+-- Đang đổ dữ liệu cho bảng `carts`
+--
+
+INSERT INTO `carts` (`cart_id`, `user_id`, `session_id`, `created_at`, `updated_at`) VALUES
+(16, NULL, '44f7dcb4144bdac03007d53feda1', '2025-10-30 15:54:51', '2025-10-30 15:54:51');
+
 -- --------------------------------------------------------
 
 --
@@ -116,6 +123,20 @@ CREATE TABLE `orders` (
   `payment_method` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Đang đổ dữ liệu cho bảng `orders`
+--
+
+INSERT INTO `orders` (`order_id`, `user_id`, `guest_info`, `order_date`, `total_amount`, `status`, `shipping_address`, `payment_method`) VALUES
+(9, 4, NULL, '2025-10-30 16:37:56', 950000.00, 'pending', 'hÃ  nam', 'BANK_TRANSFER'),
+(10, 4, NULL, '2025-10-30 16:43:10', 1420000.00, 'pending', 'HÀ NỘI', 'BANK_TRANSFER'),
+(11, 4, NULL, '2025-10-30 16:54:58', 230000.00, 'delivered', 'hà tây', 'BANK_TRANSFER'),
+(12, 4, NULL, '2025-11-03 23:52:12', 170000.00, 'pending', 'HÀ NỘI', 'BANK_TRANSFER'),
+(13, 5, NULL, '2025-10-31 00:08:50', 1420000.00, 'delivered', 'hà nam', 'COD'),
+(14, 5, NULL, '2025-10-29 00:09:10', 360000.00, 'delivered', 'hà tây', 'COD'),
+(15, 5, NULL, '2025-10-28 00:09:29', 228000.00, 'delivered', 'hà nội', 'COD'),
+(16, 5, NULL, '2025-10-27 00:09:44', 750000.00, 'delivered', 'hà nội', 'COD');
+
 -- --------------------------------------------------------
 
 --
@@ -129,6 +150,20 @@ CREATE TABLE `order_items` (
   `quantity` int(11) NOT NULL,
   `unit_price` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `order_items`
+--
+
+INSERT INTO `order_items` (`order_item_id`, `order_id`, `product_id`, `quantity`, `unit_price`) VALUES
+(9, 9, 15, 1, 950000.00),
+(10, 10, 30, 1, 1420000.00),
+(11, 11, 25, 1, 230000.00),
+(12, 12, 14, 1, 170000.00),
+(13, 13, 30, 1, 1420000.00),
+(14, 14, 21, 1, 360000.00),
+(15, 15, 20, 1, 228000.00),
+(16, 16, 16, 1, 750000.00);
 
 -- --------------------------------------------------------
 
@@ -177,7 +212,8 @@ INSERT INTO `products` (`product_id`, `name`, `slug`, `description`, `price`, `s
 (28, 'Mặt nạ dưỡng chất pha lê Revitalift Crystal Micro Essence', 'cham-soc-sac-dep-9', 'Mặt nạ dưỡng chất pha lê Revitalift Crystal Micro Essence treatment Mask Hiệu quả tức thì: sau 15 phút – làn da được cấp nước và ẩm mịn đến +126%\r\nMặt nạ dưỡng chất pha lê Revitalift Crystal Micro Essence treatment Mask Hiệu quả tức thì: sau 15 phút – làn da được cấp nước và ẩm mịn đến +126%, sau 7 ngày – da sáng mịn rạng rỡ căng mướt. Da sáng bật 1 tone sau 3 lần sử dụng. Da sáng mịn căng mướt như pha lê – hiệu quả sau 7 ngày.', 50000.00, 140, 2, 6, 1, '2025-10-29 14:20:40', 0),
 (29, 'Phấn nền chống nắng Shiseido UV Protective Stick Foundation 9g', 'cham-soc-sac-dep-10', 'Shiseido UV Protective Stick Foundation là thỏi phấn nền thông minh của thương hiệu Shiseido danh tiếng, không chỉ nổi bật bởi khả năng che phủ siêu rộng, lâu trôi và chống nắng bảo vệ da cực hiệu quả, phấn nền Shiseido ứng dụng công nghệ độc quyền từ thương hiệu này dưỡng ẩm sâu cho làn da luôn mềm mại, mượt mà suốt cả ngày.\r\n- Phấn nền với độ bám cao, mang lại lớp nền hoàn hảo và tự nhiên, cho làn da tươi trẻ, rạng rỡ suốt cả ngày.\r\n- Kết cấu cực mịn giúp mang lại lớn nền mỏng nhẹ, không gây bít tắc lỗ chân lông mà mang lại cảm giác khô thoáng, nhẹ nhàng.\r\n- Độ che phủ cực cao dễ dàng che đi những khuyết điểm trên khuôn mặt như mụn, thâm sạm, nám và tàn nhang...\r\n- Lớp nền nhanh tệp màu, giúp cân bằng tone màu da.\r\n- Bảo vệ làn da trước những tác hại của tia UV và môi trường.\r\n- Cấp ẩm và dưỡng chuyên sâu, hạn chế tình trạng da thô ráp, sần sùi hay bong tróc.', 730000.00, 150, 1, 7, 1, '2025-10-29 14:41:30', 0),
 (30, 'Chống nắng Nichiei Bussan Nano NMN+ UV Essence Luxury SPF50+ PA++++ 60g', 'cham-soc-da-mat-7', 'Kem chống nắng Nichiei Bussan Nano NMN+ UV Essence Luxury SPF50+ PA++++ 60g – Chống nắng vượt trội, dưỡng da đỉnh cao\r\nĐiểm nổi bật\r\nChỉ số SPF50+ PA++++ bảo vệ da khỏi tác hại của tia UVA/UVB suốt cả ngày dài.\r\nChứa NMN công nghệ Nano – dưỡng chất cao cấp hỗ trợ trẻ hóa làn da.\r\nKết cấu essence dạng sữa mỏng nhẹ, không gây bí da, không nâng tông, phù hợp mọi loại da.\r\nCó thể dùng như lớp lót trang điểm nhẹ nhờ độ mịn và kiềm dầu tốt.\r\nKhông chứa cồn, paraben hay hương liệu nhân tạo, an toàn cho da nhạy cảm.\r\nCông dụng\r\nTạo màng chắn chống nắng tối ưu, ngăn ngừa sạm nám, cháy nắng, lão hóa da.\r\nHỗ trợ phục hồi tế bào da tổn thương do tia UV, duy trì độ ẩm mượt và khỏe mạnh.\r\nBổ sung NMN giúp làn da luôn tươi trẻ, rạng rỡ ngay cả khi tiếp xúc nắng thường xuyên.\r\nThành phần chính\r\nNMN (Nicotinamide Mononucleotide): hỗ trợ tái tạo tế bào, ngăn ngừa lão hóa sớm do ánh nắng.\r\nChiết xuất nhau thai, collagen & HA: dưỡng ẩm và phục hồi da.\r\nVitamin E & các chiết xuất thảo dược Nhật Bản: làm dịu da và tăng cường hàng rào bảo vệ da.\r\nHướng dẫn sử dụng\r\nSử dụng mỗi sáng sau bước dưỡng da, trước khi ra ngoài khoảng 15–20 phút.\r\nLấy lượng vừa đủ, thoa đều lên mặt và cổ.\r\nNên thoa lại sau 3–4 giờ nếu hoạt động ngoài trời liên tục.', 1420000.00, 150, 2, 7, 1, '2025-10-29 14:41:30', 1),
-(31, 'Mặt Nạ Nichiei Bussan Nano NMN+ 3D Face Mask Luxury (8 miếng)', 'cham-soc-da-mat-8', 'Mặt Nạ Nichiei Bussan Nano NMN+ 3D Face Mask Luxury (8 miếng) – Trẻ hóa làn da, cấp ẩm sâu và tái tạo từ bên trong\r\nĐiểm nổi bật\r\nSử dụng công nghệ Nano NMN tiên tiến, giúp dưỡng chất thẩm thấu sâu vào biểu bì da.\r\nThiết kế mặt nạ 3D ôm khít khuôn mặt, tăng khả năng tiếp xúc và hấp thụ tối ưu.\r\nThành phần thiên nhiên lành tính, phù hợp mọi loại da, kể cả da nhạy cảm.\r\nCông dụng\r\nTái tạo tế bào da mới, giúp da căng mịn, đều màu và trẻ hóa rõ rệt.\r\nCấp ẩm chuyên sâu, cải thiện tình trạng khô ráp, bong tróc.\r\nLàm dịu da tức thì sau khi đi nắng hoặc stress.\r\nTăng độ đàn hồi và săn chắc da, giảm thiểu dấu hiệu lão hóa.\r\nThành phần chính\r\nNano NMN (Nicotinamide Mononucleotide): phục hồi – chống lão hóa – làm sáng da.\r\nChiết xuất nhau thai thực vật, collagen và axit hyaluronic: dưỡng ẩm sâu, làm đầy nếp nhăn.\r\nChiết xuất cam thảo, trà xanh: làm dịu, chống oxy hóa và hỗ trợ kháng viêm nhẹ.\r\nHướng dẫn sử dụng\r\nLàm sạch mặt.\r\nLấy mặt nạ ra khỏi túi, đắp lên da, điều chỉnh khớp với khuôn mặt.\r\nThư giãn 15–20 phút, sau đó gỡ bỏ và massage nhẹ cho dưỡng chất thấm sâu.\r\nKhông cần rửa lại với nước.', 1890000.00, 139, 2, 7, 1, '2025-10-29 14:41:30', 0);
+(31, 'Mặt Nạ Nichiei Bussan Nano NMN+ 3D Face Mask Luxury (8 miếng)', 'cham-soc-da-mat-8', 'Mặt Nạ Nichiei Bussan Nano NMN+ 3D Face Mask Luxury (8 miếng) – Trẻ hóa làn da, cấp ẩm sâu và tái tạo từ bên trong\r\nĐiểm nổi bật\r\nSử dụng công nghệ Nano NMN tiên tiến, giúp dưỡng chất thẩm thấu sâu vào biểu bì da.\r\nThiết kế mặt nạ 3D ôm khít khuôn mặt, tăng khả năng tiếp xúc và hấp thụ tối ưu.\r\nThành phần thiên nhiên lành tính, phù hợp mọi loại da, kể cả da nhạy cảm.\r\nCông dụng\r\nTái tạo tế bào da mới, giúp da căng mịn, đều màu và trẻ hóa rõ rệt.\r\nCấp ẩm chuyên sâu, cải thiện tình trạng khô ráp, bong tróc.\r\nLàm dịu da tức thì sau khi đi nắng hoặc stress.\r\nTăng độ đàn hồi và săn chắc da, giảm thiểu dấu hiệu lão hóa.\r\nThành phần chính\r\nNano NMN (Nicotinamide Mononucleotide): phục hồi – chống lão hóa – làm sáng da.\r\nChiết xuất nhau thai thực vật, collagen và axit hyaluronic: dưỡng ẩm sâu, làm đầy nếp nhăn.\r\nChiết xuất cam thảo, trà xanh: làm dịu, chống oxy hóa và hỗ trợ kháng viêm nhẹ.\r\nHướng dẫn sử dụng\r\nLàm sạch mặt.\r\nLấy mặt nạ ra khỏi túi, đắp lên da, điều chỉnh khớp với khuôn mặt.\r\nThư giãn 15–20 phút, sau đó gỡ bỏ và massage nhẹ cho dưỡng chất thấm sâu.\r\nKhông cần rửa lại với nước.', 1890000.00, 139, 2, 7, 1, '2025-10-29 14:41:30', 0),
+(34, 'Sữa rửa mặt Nichiei Bussan Nano NMN+ Foaming Soap Luxury 150g', 'cham-soc-da-mat-9', 'Sữa rửa mặt Nichiei Bussan Nano NMN+ Foaming Soap Luxury 150g – Làm sạch sâu, mềm mịn và sáng khỏe tự nhiên\r\n\r\nĐiểm nổi bật\r\n\r\nCông nghệ Nano NMN độc quyền từ Nhật Bản giúp làm sạch đồng thời hỗ trợ tái tạo tế bào da mới.\r\n\r\nTạo bọt siêu mịn, làm sạch sâu lỗ chân lông mà không gây khô căng hay bào mòn da.\r\n\r\nKết hợp chiết xuất thiên nhiên giúp làm dịu và dưỡng ẩm ngay từ bước làm sạch.\r\n\r\nPhù hợp mọi loại da, kể cả da nhạy cảm.\r\n\r\nCông dụng\r\n\r\nLàm sạch bụi bẩn, bã nhờn, lớp makeup nhẹ và cặn kem chống nắng.\r\n\r\nGiúp lỗ chân lông thông thoáng, giảm nguy cơ hình thành mụn.\r\n\r\nTái tạo và phục hồi da nhờ NMN – hoạt chất nổi bật trong chăm sóc da chuyên sâu.\r\n\r\nGiữ ẩm và làm mềm da sau khi rửa mặt, không làm mất lớp dầu tự nhiên bảo vệ da.\r\n\r\nThành phần chính\r\n\r\nNano NMN (Nicotinamide Mononucleotide): cải thiện kết cấu da, làm sáng và ngăn lão hóa.\r\n\r\nChiết xuất nha đam, trà xanh, cam thảo: kháng viêm, làm dịu và cấp nước cho da.\r\n\r\nAxit Hyaluronic và Glycerin: giúp giữ ẩm sâu, làm mềm da hiệu quả.\r\n\r\nHướng dẫn sử dụng\r\n\r\nLàm ướt mặt.\r\n\r\nLấy lượng vừa đủ ra tay hoặc lưới tạo bọt, đánh bông thành bọt mịn.\r\n\r\nMassage nhẹ nhàng khắp mặt trong 30 giây – 1 phút.\r\n\r\nRửa sạch lại bằng nước ấm, lau khô nhẹ nhàng.\r\n\r\n', 1690000.00, 120, 2, 7, 1, '2025-11-03 21:02:32', 0);
 
 -- --------------------------------------------------------
 
@@ -197,18 +233,18 @@ CREATE TABLE `product_images` (
 --
 
 INSERT INTO `product_images` (`image_id`, `product_id`, `image_url`, `is_primary`) VALUES
-(1, 1, 'mdeia/TravelKitSetmain.jsp', 1),
-(2, 1, 'mdeia/KitSet1.jsp', 0),
-(3, 1, 'mdeia/KitSet2.jsp', 0),
-(4, 1, 'mdeia/KitSet3.jsp', 0),
-(5, 2, 'mdeia/InniHairmain.jsp', 1),
-(6, 2, 'mdeia/InniHair1.jsp', 0),
-(7, 2, 'mdeia/InniHair2.jsp', 0),
-(8, 2, 'mdeia/InniHair3.jsp', 0),
-(9, 3, 'mdeia/InniSonmain.jsp', 1),
-(10, 3, 'mdeia/InniSon1.jsp', 0),
-(11, 3, 'mdeia/InniSon2.jsp', 0),
-(12, 3, 'mdeia/InniSon3.jsp', 0),
+(1, 1, 'media/TravelKitSetmain.jpg', 1),
+(2, 1, 'media/KitSet1.jpg', 0),
+(3, 1, 'media/KitSet2.jpg', 0),
+(4, 1, 'media/KitSet3.jpg', 0),
+(5, 2, 'media/InniHairmain.jpg', 1),
+(6, 2, 'media/InniHair1.jpg', 0),
+(7, 2, 'media/InniHair2.jpg', 0),
+(8, 2, 'media/InniHair3.jpg', 0),
+(9, 3, 'media/InniSonmain.jpg', 1),
+(10, 3, 'media/InniSon1.jpg', 0),
+(11, 3, 'media/InniSon2.jpg', 0),
+(12, 3, 'media/InniSon3.jpg', 0),
 (25, 12, 'media/LRPtaytrangmain.jpg', 1),
 (26, 12, 'media/LRP1.jpg', 0),
 (27, 12, 'media/LRP2.jpg', 0),
@@ -241,10 +277,10 @@ INSERT INTO `product_images` (`image_id`, `product_id`, `image_url`, `is_primary
 (54, 19, 'media/Brand4mcr1.jpg', 0),
 (55, 19, 'media/Brand4mcr2.jpg', 0),
 (56, 19, 'media/Brand4mcr3.jpg', 0),
-(57, 20, 'media/Brand4pp.jpg', 1),
-(58, 20, 'media/Brand4pp1.jpg', 0),
-(59, 20, 'media/Brand4pp2.jpg', 0),
-(60, 20, 'media/Brand4pp3.jpg', 0),
+(57, 20, 'media/Brand4cm.jpg', 1),
+(58, 20, 'media/Brand4cm1.jpg', 0),
+(59, 20, 'media/Brand4cm2.jpg', 0),
+(60, 20, 'media/Brand4cm3.jpg', 0),
 (61, 21, 'media/Brand5tc.jpg', 1),
 (62, 21, 'media/Brand5tc1.jpg', 0),
 (63, 21, 'media/Brand5tc2.jpg', 0),
@@ -327,9 +363,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `username`, `password_hash`, `email`, `full_name`, `phone_number`, `address`, `role`, `created_at`) VALUES
-(1, 'trung', '123456', 'trunglay2k4@gmail.com', 'Đoàn Quốc Trung', '0393664604', 'Hà Nội', 'admin', '2025-10-28 22:35:21'),
-(2, 'minh123', '123456', 'tran@gmail.com', 'Minh Trần', '0354666064', 'Hà Nội', 'customer', '2025-10-28 22:35:21'),
-(3, 'trang223', '123456', 'trangk4@gmail.com', 'Huyền Trang', '0323234604', 'Hà Nội', 'customer', '2025-10-28 22:35:21');
+(1, 'trung', '$2a$10$FMLGwXitl7XNLNR/VuswGOtA/WIwWSU8xO9DjOXznTnwMnDpqWh5S', 'trunglay2k4@gmail.com', 'Đoàn Quốc Trung', '0393664604', 'Hà Nội', 'admin', '2025-10-28 22:35:21'),
+(2, 'minh123', '$2a$10$HAtuYFNXQGxNgrP.1hxo6O6GfApeqDIGWjYWtuUyQfdbnl/86q9Lq', 'tran@gmail.com', 'Minh Trần', '0354666064', 'Hà Nội', 'customer', '2025-10-28 22:35:21'),
+(4, 'tuanluong', '$2a$10$5kecApxyqQ3kXD6IsBZjM.JxkS2kAPKYkFnJkfLvce9J2C2f5dXxa', 'tranbinhan14c@gmail.com', 'luong tuan', '0545345234', 'Hà Nội', 'customer', '2025-10-29 21:07:02'),
+(5, 'tranlinh', '$2a$10$okjBtjqIM2Y9Eg8mjcG8jO4ui.xCvZd2Oly9dhpOE.DA4S79VB9rm', 'tranhalinh@gmail.com', 'Trần Hà Linh', '0545345234', 'Hà Nội', 'customer', '2025-11-03 23:53:30');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -432,7 +469,7 @@ ALTER TABLE `carts`
 -- AUTO_INCREMENT cho bảng `cart_items`
 --
 ALTER TABLE `cart_items`
-  MODIFY `cart_item_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `cart_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT cho bảng `categories`
@@ -444,19 +481,19 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT cho bảng `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT cho bảng `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `order_item_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `order_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT cho bảng `products`
 --
 ALTER TABLE `products`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT cho bảng `product_images`
@@ -474,7 +511,7 @@ ALTER TABLE `reviews`
 -- AUTO_INCREMENT cho bảng `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Các ràng buộc cho các bảng đã đổ

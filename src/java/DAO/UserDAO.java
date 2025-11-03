@@ -14,10 +14,41 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import Util.DBconnect;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 public class UserDAO {
-    
+private User extractUserFromResultSet(ResultSet rs) throws SQLException {
+        User user = new User();
+        user.setUserId(rs.getInt("user_id"));
+        user.setUsername(rs.getString("username"));
+        user.setEmail(rs.getString("email"));
+        user.setFullName(rs.getString("full_name"));
+        user.setPhonenumber(rs.getString("phone_number"));
+        user.setAddress(rs.getString("address"));
+        user.setRole(rs.getString("role"));
+        // Không lấy password_hash trừ khi thực hiện login/đổi mật khẩu
+        return user;
+    }
+
+    // --- R (READ): Lấy tất cả người dùng ---
+    public List<User> getAllUsers() {
+        List<User> userList = new ArrayList<>();
+        String sql = "SELECT user_id, username, email, full_name, phone_number, address, role FROM Users ORDER BY user_id ASC";
+        
+        try (Connection conn = Util.DBconnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            
+            while (rs.next()) {
+                userList.add(extractUserFromResultSet(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return userList;
+    }
 public User getUserByUsername(String username) {
         
         // Truy vấn SELECT tất cả các trường cần thiết, bao gồm password_hash
@@ -156,7 +187,7 @@ public User getUserByUsername(String username) {
         ps.setString(1, fullName);
         ps.setString(2, phoneNumber);
         ps.setString(3, address);
-        ps.setInt(4, userId); // Điều kiện WHERE
+        ps.setInt(4, userId); 
 
         return ps.executeUpdate() > 0;
     } catch (Exception e) {
@@ -164,4 +195,107 @@ public User getUserByUsername(String username) {
         return false;
     }
 }
+    public User getUserById(int userId) {
+        String sql = "SELECT user_id, username, password_hash, email, full_name, phone_number, address, role FROM Users WHERE user_id = ?";
+        User user = null;
+        
+        try (Connection conn = Util.DBconnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setInt(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    user = extractUserFromResultSet(rs);
+                    // Có thể cần setPasswordHash(rs.getString("password_hash")) nếu dùng cho form sửa
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
+    // --- U (UPDATE): Cập nhật thông tin người dùng (Admin) ---
+    public boolean updateUser(User user) {
+        // Chú ý: Admin không nên cập nhật password_hash ở đây
+        String sql = "UPDATE Users SET full_name=?, phone_number=?, address=?, role=? WHERE user_id=?";
+        
+        try (Connection conn = Util.DBconnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, user.getFullName());
+            ps.setString(2, user.getPhonenumber());
+            ps.setString(3, user.getAddress());
+            ps.setString(4, user.getRole());
+            ps.setInt(5, user.getUserId());
+            
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    // --- D (DELETE): Xóa người dùng ---
+    public boolean deleteUser(int userId) {
+        String sql = "DELETE FROM Users WHERE user_id=?";
+        
+        try (Connection conn = Util.DBconnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setInt(1, userId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean updatePasswordByEmail(String email, String newHashedPassword) {
+        String sql = "UPDATE Users SET password_hash = ? WHERE email = ?";
+        
+        try (Connection conn = DBconnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, newHashedPassword);
+            ps.setString(2, email);
+            
+            return ps.executeUpdate() > 0;
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public String getPasswordHash(int userId) {
+        String sql = "SELECT password_hash FROM Users WHERE user_id = ?";
+        try (Connection conn = Util.DBconnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setInt(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("password_hash");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public boolean updatePassword(int userId, String newHashedPassword) {
+        String sql = "UPDATE Users SET password_hash = ? WHERE user_id = ?";
+        
+        try (Connection conn = Util.DBconnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, newHashedPassword);
+            ps.setInt(2, userId);
+            
+            return ps.executeUpdate() > 0;
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

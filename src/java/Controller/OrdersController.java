@@ -20,11 +20,11 @@ public class OrdersController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+         request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("currentUser");
         
-        if (user == null || user.getUserId() == 0) {
+        if (user == null || user.getUserId() == null ||user.getUserId() == 0) {
             response.sendRedirect(request.getContextPath() + "/home.jsp");
             return;
         }

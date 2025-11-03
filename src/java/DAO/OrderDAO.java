@@ -2,12 +2,15 @@ package DAO;
 
 import Model.CartItem;
 import Model.Order;
+import Model.OrderItem;
 import Util.DBconnect;
 
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class OrderDAO {
 
@@ -145,21 +148,64 @@ public class OrderDAO {
     }
 
     // Lấy order theo order_id (dùng cho chi tiết)
-    public Order getOrderById(int orderId) {
-        String sql = "SELECT * FROM Orders WHERE order_id = ?";
-        try (Connection conn = DBconnect.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, orderId);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return mapOrderFromResultSet(rs);
-                }
+ public Order getOrderById(int orderId) {
+    String sql = "SELECT o.*, COALESCE(u.full_name, o.guest_info) AS customer_name, u.phone_number " +
+                 "FROM Orders o " +
+                 "LEFT JOIN Users u ON o.user_id = u.user_id " +
+                 "WHERE o.order_id = ?";
+    Order order = null;
+    
+    try (Connection conn = DBconnect.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        
+        ps.setInt(1, orderId);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                order = mapOrderFromResultSet(rs); // Hàm map cũ của bạn
+                
+                // Set các trường mới từ JOIN
+                order.setCustomerName(rs.getString("customer_name"));
+                order.setCustomerPhone(rs.getString("phone_number"));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-        return null;
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+    return order;
+}
+
+// THÊM HÀM MỚI NÀY: Lấy chi tiết các mặt hàng (Tên SP, SL, Giá)
+public List<OrderItem> getOrderItemsWithDetails(int orderId) {
+    List<OrderItem> items = new ArrayList<>();
+    
+    // JOIN với bảng Products để lấy tên sản phẩm
+    String sql = "SELECT oi.*, p.name AS product_name " +
+                 "FROM Order_Items oi " +
+                 "JOIN Products p ON oi.product_id = p.product_id " +
+                 "WHERE oi.order_id = ?";
+
+    try (Connection conn = DBconnect.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        
+        ps.setInt(1, orderId);
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                OrderItem item = new OrderItem();
+                item.setProductId(rs.getInt("product_id"));
+                item.setQuantity(rs.getInt("quantity"));
+                item.setUnitPrice(rs.getDouble("unit_price"));
+                
+                // Set trường mới
+                item.setProductName(rs.getString("product_name"));
+                
+                items.add(item);
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return items;
+}
 
     // Hàm tiện ích map ResultSet -> Order
     private Order mapOrderFromResultSet(ResultSet rs) throws SQLException {
@@ -183,4 +229,187 @@ public class OrderDAO {
         order.setPaymentMethod(rs.getString("payment_method"));
         return order;
     }
+    public List<Order> getAllOrders() {
+        List<Order> orders = new ArrayList<>();
+        
+        // Sử dụng COALESCE để lấy Tên (nếu là User) hoặc Guest Info (nếu là Khách)
+        String sql = "SELECT o.*, COALESCE(u.full_name, o.guest_info) AS customer_name " +
+                     "FROM Orders o " +
+                     "LEFT JOIN Users u ON o.user_id = u.user_id " +
+                     "ORDER BY o.order_date DESC";
+
+        try (Connection conn = DBconnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Order order = mapOrderFromResultSet(rs); // Dùng hàm map đã có
+                
+                // Set thuộc tính customer_name mới
+                order.setCustomerName(rs.getString("customer_name")); 
+                
+                orders.add(order);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orders;
+    }
+
+    public boolean updateOrderStatus(int orderId, String status) {
+        String sql = "UPDATE Orders SET status = ? WHERE order_id = ?";
+        
+        try (Connection conn = DBconnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, status);
+            ps.setInt(2, orderId);
+            
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteOrder(int orderId) {
+        String sql = "DELETE FROM Orders WHERE order_id = ?";
+        
+        try (Connection conn = DBconnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setInt(1, orderId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean cancelOrder(int orderId, int userId) {
+    // Cập nhật trạng thái, nhưng chỉ khi user_id khớp VÀ status = 'pending'
+    String sql = "UPDATE Orders SET status = 'canceled' WHERE order_id = ? AND user_id = ? AND status = 'pending'";
+    
+    try (Connection conn = Util.DBconnect.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        
+        ps.setInt(1, orderId);
+        ps.setInt(2, userId);
+        
+        return ps.executeUpdate() > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
+
+public boolean updateShippingAddress(int orderId, int userId, String newAddress) {
+    String sql = "UPDATE Orders SET shipping_address = ? WHERE order_id = ? AND user_id = ? AND status = 'pending'";
+    
+    try (Connection conn = Util.DBconnect.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        
+        ps.setString(1, newAddress);
+        ps.setInt(2, orderId);
+        ps.setInt(3, userId);
+        
+        return ps.executeUpdate() > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
+public Map<Integer, Double> getWeeklyRevenueData() {
+    // Khởi tạo 7 ngày với 0 doanh thu
+    Map<Integer, Double> weeklyRevenue = new HashMap<>();
+    for (int i = 1; i <= 7; i++) {
+        weeklyRevenue.put(i, 0.0);
+    }
+    
+    // SQL: Lấy tổng doanh thu (delivered) của tuần hiện tại, nhóm theo ngày
+    String sql = "SELECT DAYOFWEEK(order_date) AS day_of_week, SUM(total_amount) AS daily_revenue " +
+                 "FROM Orders " +
+                 "WHERE status = 'delivered' " +
+                 "  AND YEARWEEK(order_date, 1) = YEARWEEK(NOW(), 1) " + // 1 = Tuần bắt đầu từ Thứ 2
+                 "GROUP BY DAYOFWEEK(order_date)";
+
+    try (Connection conn = Util.DBconnect.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        while (rs.next()) {
+            int dayOfWeek = rs.getInt("day_of_week"); // 1=CN, 2=T2, ...
+            double dailyRevenue = rs.getDouble("daily_revenue");
+            weeklyRevenue.put(dayOfWeek, dailyRevenue);
+        }
+    } catch (SQLException e) {
+        System.err.println("Lỗi SQL khi lấy doanh thu tuần: " + e.getMessage());
+        e.printStackTrace();
+    }
+    
+    return weeklyRevenue;
+}
+public BigDecimal getMonthlyRevenue() {
+    BigDecimal revenue = BigDecimal.ZERO;
+    
+    String sql = "SELECT SUM(total_amount) AS monthly_revenue " +
+                 "FROM Orders WHERE status = 'delivered' " +
+                 "AND YEAR(order_date) = YEAR(NOW()) AND MONTH(order_date) = MONTH(NOW())";
+
+    try (Connection conn = Util.DBconnect.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        if (rs.next()) {
+            revenue = rs.getBigDecimal("monthly_revenue");
+        }
+    } catch (SQLException e) {
+        System.err.println("Lỗi SQL khi tính doanh thu tháng: " + e.getMessage());
+        e.printStackTrace();
+    }
+    
+    return (revenue == null) ? BigDecimal.ZERO : revenue;
+}
+
+public BigDecimal getYearlyRevenue() {
+    BigDecimal revenue = BigDecimal.ZERO;
+    
+    String sql = "SELECT SUM(total_amount) AS yearly_revenue " +
+                 "FROM Orders WHERE status = 'delivered' " +
+                 "AND YEAR(order_date) = YEAR(NOW())";
+
+    try (Connection conn = Util.DBconnect.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        if (rs.next()) {
+            revenue = rs.getBigDecimal("yearly_revenue");
+        }
+    } catch (SQLException e) {
+        System.err.println("Lỗi SQL khi tính doanh thu năm: " + e.getMessage());
+        e.printStackTrace();
+    }
+    
+    return (revenue == null) ? BigDecimal.ZERO : revenue;
+}
+
+public int getPendingRequestsCount() {
+    int count = 0;
+    
+    String sql = "SELECT COUNT(order_id) AS pending_count " +
+                 "FROM Orders WHERE status IN ('pending', 'processing')";
+
+    try (Connection conn = Util.DBconnect.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        if (rs.next()) {
+            count = rs.getInt("pending_count");
+        }
+    } catch (SQLException e) {
+        System.err.println("Lỗi SQL khi đếm yêu cầu chờ xử lý: " + e.getMessage());
+        e.printStackTrace();
+    }
+    
+    return count;
+}
 }
